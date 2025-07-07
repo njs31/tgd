@@ -453,7 +453,7 @@ function App() {
       {/* Hero Content */}
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 flex items-center justify-center min-h-screen sm:min-h-[80vh] bg-black">
         <div className="max-w-7xl mx-auto">
-          <div className="max-w-6xl mx-auto text-center">
+          <div className="max-w-6xl mx-auto text-center flex flex-col gap-6 sm:gap-8 lg:gap-10 items-center">
             {/* Main Gym Name - Inspired by Logo */}
             <div className="mb-4 sm:mb-8 lg:mb-10 flex flex-col items-center justify-center relative gap-3 sm:gap-5 lg:gap-7">
               <div
@@ -502,7 +502,7 @@ function App() {
             </div>
 
             {/* CTA Button - Responsive */}
-            <div className="flex justify-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="flex justify-center">
               <button
                 onClick={openPricingModal}
                 className="group relative inline-flex items-center px-6 sm:px-8 lg:px-12 py-3 sm:py-4 bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 font-medium text-base sm:text-lg tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-gray-700 hover:to-gray-800 hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
@@ -521,7 +521,7 @@ function App() {
             </div>
 
             {/* Stats Section - Responsive Grid */}
-            <div className="mt-12 sm:mt-16 lg:mt-24 grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-sm sm:max-w-lg lg:max-w-2xl mx-auto">
+            <div className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-sm sm:max-w-lg lg:max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-400 mb-1 sm:mb-2">
                   5K+
@@ -693,8 +693,8 @@ function App() {
           </div>
 
           {/* Trainers Marquee */}
-          <div className="relative overflow-x-auto overflow-y-hidden py-2 scrollbar-hide sm:overflow-x-hidden">
-            <div className="flex gap-8 whitespace-nowrap sm:animate-marquee flex-nowrap">
+          <div className="relative overflow-x-hidden overflow-y-hidden py-2">
+            <div className="flex gap-8 whitespace-nowrap flex-nowrap w-max animate-marquee">
               <style>{`
                 .animate-marquee {
                   animation: marquee 10s linear infinite;
@@ -702,18 +702,6 @@ function App() {
                 @keyframes marquee {
                   0% { transform: translateX(0); }
                   100% { transform: translateX(-50%); }
-                }
-                @media (max-width: 640px) {
-                  .animate-marquee {
-                    animation: none !important;
-                  }
-                  .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                  }
-                  .scrollbar-hide {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                  }
                 }
               `}</style>
               {trainers.concat(trainers).map((trainer, index, arr) => (
