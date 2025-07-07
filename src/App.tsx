@@ -451,26 +451,33 @@ function App() {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 flex items-center justify-center min-h-[80vh] bg-black">
-        <div className="max-w-7xl mx-auto w-full">
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 flex items-center justify-center min-h-screen sm:min-h-[80vh] bg-black">
+        <div className="max-w-7xl mx-auto">
           <div className="max-w-6xl mx-auto text-center">
-            {/* Main Gym Name - Fully Responsive */}
-            <div className="mb-6 sm:mb-8 lg:mb-10">
-              <h1 className="text-gray-300 text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[12rem] 3xl:text-[14rem] font-black leading-none tracking-tight">
-                <span className="block bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 bg-clip-text text-transparent drop-shadow-2xl">
-                  THE GYM
-                </span>
-                <span className="block bg-gradient-to-r from-gray-300 via-gray-200 to-gray-400 bg-clip-text text-transparent drop-shadow-2xl -mt-1 sm:-mt-2 lg:-mt-4">
-                  DIVISION
-                </span>
-              </h1>
-
-              {/* Highlight Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-400/10 to-transparent blur-3xl opacity-50"></div>
+            {/* Main Gym Name - Inspired by Logo */}
+            <div className="mb-4 sm:mb-8 lg:mb-10 flex flex-col items-center justify-center relative gap-3 sm:gap-5 lg:gap-7">
+              <div
+                className="text-white text-xs sm:text-sm md:text-base tracking-[0.4em] font-light uppercase"
+                style={{ letterSpacing: "0.4em" }}
+              >
+                THE
+              </div>
+              <div
+                className="text-white font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-none"
+                style={{ fontFamily: "sans-serif" }}
+              >
+                Gym
+              </div>
+              <div
+                className="text-white font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-none"
+                style={{ fontFamily: "sans-serif" }}
+              >
+                Division
+              </div>
             </div>
 
             {/* Tagline - Responsive Typography */}
-            <div className="mb-4 sm:mb-6 lg:mb-8">
+            <div className="mb-2 sm:mb-6 lg:mb-8">
               <div className="relative">
                 <p className="text-gray-500 text-sm sm:text-base md:text-lg lg:text-xl font-light tracking-[0.2em] uppercase mb-1 sm:mb-2">
                   Not Just
@@ -486,7 +493,7 @@ function App() {
             </div>
 
             {/* Description - Responsive */}
-            <div className="mb-4 sm:mb-6 lg:mb-8 px-4 sm:px-0">
+            <div className="mb-2 sm:mb-6 lg:mb-8 px-2 sm:px-0">
               <p className="text-gray-500 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl sm:max-w-2xl mx-auto font-light">
                 Transform your body, elevate your mind, and join a community
                 dedicated to pushing beyond limits. This is where legends are
@@ -686,8 +693,8 @@ function App() {
           </div>
 
           {/* Trainers Marquee */}
-          <div className="relative overflow-x-hidden overflow-y-hidden py-2">
-            <div className="flex gap-8 animate-marquee whitespace-nowrap">
+          <div className="relative overflow-x-auto overflow-y-hidden py-2 scrollbar-hide sm:overflow-x-hidden">
+            <div className="flex gap-8 whitespace-nowrap sm:animate-marquee flex-nowrap">
               <style>{`
                 .animate-marquee {
                   animation: marquee 10s linear infinite;
@@ -698,79 +705,91 @@ function App() {
                 }
                 @media (max-width: 640px) {
                   .animate-marquee {
-                    animation-duration: 5s !important;
+                    animation: none !important;
+                  }
+                  .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                  }
+                  .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
                   }
                 }
               `}</style>
-              {trainers.concat(trainers).map((trainer, index) => (
-                <div
-                  key={index}
-                  className="trainer-card group relative min-w-[260px] max-w-xs w-[90vw] sm:w-72 bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-gray-600/50 transition-all duration-700 transform hover:scale-105 mx-2"
-                >
-                  {/* Background Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-gray-800/10 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  {/* Card Content */}
-                  <div className="relative z-10">
-                    {/* Trainer Image */}
-                    <div className="mb-6 sm:mb-8">
-                      <div className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 group-hover:border-gray-600/50 transition-all duration-500">
-                        <img
-                          src={trainer.image}
-                          alt={trainer.name}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          loading="lazy"
-                        />
-                        {/* Image Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        {/* Instagram Button Overlay */}
-                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+              {trainers.concat(trainers).map((trainer, index, arr) => (
+                <React.Fragment key={index}>
+                  <div className="trainer-card group relative min-w-[260px] max-w-xs w-[90vw] sm:w-72 bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-gray-600/50 transition-all duration-700 transform hover:scale-105 mx-2">
+                    {/* Background Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-gray-800/10 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    {/* Card Content */}
+                    <div className="relative z-10">
+                      {/* Trainer Image */}
+                      <div className="mb-6 sm:mb-8">
+                        <div className="relative w-full aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 group-hover:border-gray-600/50 transition-all duration-500">
+                          <img
+                            src={trainer.image}
+                            alt={trainer.name}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy"
+                          />
+                          {/* Image Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          {/* Instagram Button Overlay */}
+                          <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                            <button
+                              onClick={() =>
+                                handleTrainerInstagram(trainer.instagram)
+                              }
+                              className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-xl flex items-center justify-center text-gray-300 hover:text-gray-200 hover:from-gray-700/90 hover:to-gray-800/90 transition-all duration-300 transform hover:scale-110"
+                            >
+                              <Instagram className="h-5 w-5 sm:h-6 sm:w-6" />
+                            </button>
+                          </div>
+                          {/* Image Border Glow */}
+                          <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-gray-600/10 via-gray-500/5 to-gray-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
+                        </div>
+                      </div>
+                      {/* Trainer Info */}
+                      <div className="text-center">
+                        {/* Name */}
+                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-300 mb-2 sm:mb-3 group-hover:text-gray-200 transition-colors duration-300">
+                          {trainer.name}
+                        </h3>
+                        {/* Specialty */}
+                        <p className="text-gray-500 text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 group-hover:text-gray-400 transition-colors duration-300 font-medium">
+                          {trainer.specialty}
+                        </p>
+                        {/* Experience */}
+                        <p className="text-gray-600 text-xs sm:text-sm group-hover:text-gray-500 transition-colors duration-300 font-light">
+                          {trainer.experience}
+                        </p>
+                        {/* Instagram Link Button */}
+                        <div className="mt-4 sm:mt-6">
                           <button
                             onClick={() =>
                               handleTrainerInstagram(trainer.instagram)
                             }
-                            className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-xl flex items-center justify-center text-gray-300 hover:text-gray-200 hover:from-gray-700/90 hover:to-gray-800/90 transition-all duration-300 transform hover:scale-110"
+                            className="group/btn inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 text-sm font-medium rounded-xl border border-gray-700/50 hover:from-gray-700/80 hover:to-gray-800/80 hover:text-gray-200 hover:border-gray-600/50 transition-all duration-300 transform hover:scale-105"
                           >
-                            <Instagram className="h-5 w-5 sm:h-6 sm:w-6" />
+                            <Instagram className="h-4 w-4 group-hover/btn:rotate-12 transition-transform duration-300" />
+                            <span>Follow</span>
                           </button>
                         </div>
-                        {/* Image Border Glow */}
-                        <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-gray-600/10 via-gray-500/5 to-gray-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
                       </div>
                     </div>
-                    {/* Trainer Info */}
-                    <div className="text-center">
-                      {/* Name */}
-                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-300 mb-2 sm:mb-3 group-hover:text-gray-200 transition-colors duration-300">
-                        {trainer.name}
-                      </h3>
-                      {/* Specialty */}
-                      <p className="text-gray-500 text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 group-hover:text-gray-400 transition-colors duration-300 font-medium">
-                        {trainer.specialty}
-                      </p>
-                      {/* Experience */}
-                      <p className="text-gray-600 text-xs sm:text-sm group-hover:text-gray-500 transition-colors duration-300 font-light">
-                        {trainer.experience}
-                      </p>
-                      {/* Instagram Link Button */}
-                      <div className="mt-4 sm:mt-6">
-                        <button
-                          onClick={() =>
-                            handleTrainerInstagram(trainer.instagram)
-                          }
-                          className="group/btn inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-gray-800/80 to-gray-900/80 text-gray-300 text-sm font-medium rounded-xl border border-gray-700/50 hover:from-gray-700/80 hover:to-gray-800/80 hover:text-gray-200 hover:border-gray-600/50 transition-all duration-300 transform hover:scale-105"
-                        >
-                          <Instagram className="h-4 w-4 group-hover/btn:rotate-12 transition-transform duration-300" />
-                          <span>Follow</span>
-                        </button>
-                      </div>
-                    </div>
+                    {/* Card Border Glow */}
+                    <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-gray-700/10 via-gray-500/5 to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
+                    {/* Floating Particles Effect */}
+                    <div className="absolute top-4 left-4 w-2 h-2 bg-gray-500/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:animate-pulse"></div>
+                    <div className="absolute bottom-6 right-6 w-1 h-1 bg-gray-400/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-200 group-hover:animate-pulse"></div>
                   </div>
-                  {/* Card Border Glow */}
-                  <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-gray-700/10 via-gray-500/5 to-gray-700/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
-                  {/* Floating Particles Effect */}
-                  <div className="absolute top-4 left-4 w-2 h-2 bg-gray-500/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:animate-pulse"></div>
-                  <div className="absolute bottom-6 right-6 w-1 h-1 bg-gray-400/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-200 group-hover:animate-pulse"></div>
-                </div>
+                  {/* Add white dot after the last card */}
+                  {index === arr.length - 1 && (
+                    <div className="flex items-center justify-center min-w-[40px] mx-2">
+                      <div className="w-4 h-4 rounded-full bg-white"></div>
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -906,13 +925,13 @@ function App() {
               <div className="mb-12 sm:mb-16">
                 <div className="text-center mb-8 sm:mb-12">
                   <div className="inline-flex items-center space-x-3 mb-4">
-                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500" />
+                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
                     <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-300">
                       PERSONAL TRAINING
                     </h3>
-                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500" />
+                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-400 text-sm sm:text-base font-medium bg-gray-500/10 border border-gray-500/20 rounded-xl px-4 py-2 inline-block">
+                  <p className="text-gray-400 text-sm sm:text-base font-medium bg-gray-700/20 border border-gray-600/30 rounded-xl px-4 py-2 inline-block">
                     1 Month Membership Free
                   </p>
                 </div>
@@ -923,14 +942,14 @@ function App() {
                       key={index}
                       className={`relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
                         plan.popular
-                          ? "border-gray-500/50 ring-2 ring-gray-500/20"
+                          ? "border-gray-500/50 ring-2 ring-gray-700/30"
                           : "border-gray-700/50 hover:border-gray-600/50"
                       }`}
                     >
                       {plan.popular && (
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                          <div className="bg-gradient-to-r from-gray-600 to-gray-700 text-gray-200 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1">
-                            <Star className="h-4 w-4" />
+                          <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1 border border-gray-600/40">
+                            <Star className="h-4 w-4 text-gray-400" />
                             <span>POPULAR</span>
                           </div>
                         </div>
@@ -945,7 +964,7 @@ function App() {
                         </div>
                         <button
                           onClick={handleBuyNow}
-                          className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                          className="w-full bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                         >
                           Buy Now
                         </button>
@@ -973,14 +992,14 @@ function App() {
                       key={index}
                       className={`relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
                         plan.popular
-                          ? "border-gray-500/50 ring-2 ring-gray-500/20"
+                          ? "border-gray-500/50 ring-2 ring-gray-700/30"
                           : "border-gray-700/50 hover:border-gray-600/50"
                       }`}
                     >
                       {plan.popular && (
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                          <div className="bg-gradient-to-r from-gray-600 to-gray-700 text-gray-200 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1">
-                            <Star className="h-4 w-4" />
+                          <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1 border border-gray-600/40">
+                            <Star className="h-4 w-4 text-gray-400" />
                             <span>POPULAR</span>
                           </div>
                         </div>
@@ -998,7 +1017,7 @@ function App() {
                         </p>
                         <button
                           onClick={handleBuyNow}
-                          className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                          className="w-full bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                         >
                           Buy Now
                         </button>
@@ -1012,11 +1031,11 @@ function App() {
               <div className="mb-8 sm:mb-12">
                 <div className="text-center mb-8 sm:mb-12">
                   <div className="inline-flex items-center space-x-3 mb-4">
-                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
+                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
                     <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-300">
                       COUPLE MEMBERSHIPS
                     </h3>
-                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
+                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
                   </div>
                 </div>
 
@@ -1025,11 +1044,11 @@ function App() {
                     {pricingPlans.couple.map((plan, index) => (
                       <div
                         key={index}
-                        className="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-purple-500/50 ring-2 ring-purple-500/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                        className="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 ring-2 ring-gray-700/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
                       >
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                          <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1">
-                            <Star className="h-4 w-4" />
+                          <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1 border border-gray-600/40">
+                            <Star className="h-4 w-4 text-gray-400" />
                             <span>BEST VALUE</span>
                           </div>
                         </div>
@@ -1046,7 +1065,7 @@ function App() {
                           </p>
                           <button
                             onClick={handleBuyNow}
-                            className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                            className="w-full bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                           >
                             Buy Now
                           </button>
