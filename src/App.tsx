@@ -34,6 +34,9 @@ function App() {
   const footerRef = useRef<HTMLElement | null>(null);
   const [heroVisible, setHeroVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement | null>(null);
+  const [visibleOfferCards, setVisibleOfferCards] = useState<number[]>([]);
+  const [visibleTrainerCards, setVisibleTrainerCards] = useState<number[]>([]);
+  const [visibleGalleryCards, setVisibleGalleryCards] = useState<number[]>([]);
 
   const handleCall = () => {
     window.open("tel:08035568589", "_self");
@@ -515,6 +518,78 @@ function App() {
     ? galleryImages.find((img) => img.id === selectedImage)
     : null;
 
+  // Intersection Observer for WHAT WE OFFER cards
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(
+            entry.target.getAttribute("data-offer-index") || "0"
+          );
+          if (entry.isIntersecting) {
+            setVisibleOfferCards((prev) =>
+              Array.from(new Set([...prev, index]))
+            );
+          } else {
+            setVisibleOfferCards((prev) => prev.filter((i) => i !== index));
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    const offerCards = document.querySelectorAll(".offer-card");
+    offerCards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, []);
+
+  // Intersection Observer for trainer cards
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(
+            entry.target.getAttribute("data-trainer-index") || "0"
+          );
+          if (entry.isIntersecting) {
+            setVisibleTrainerCards((prev) =>
+              Array.from(new Set([...prev, index]))
+            );
+          } else {
+            setVisibleTrainerCards((prev) => prev.filter((i) => i !== index));
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    const trainerCards = document.querySelectorAll(".trainer-card");
+    trainerCards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, []);
+
+  // Intersection Observer for gallery items
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(
+            entry.target.getAttribute("data-gallery-index") || "0"
+          );
+          if (entry.isIntersecting) {
+            setVisibleGalleryCards((prev) =>
+              Array.from(new Set([...prev, index]))
+            );
+          } else {
+            setVisibleGalleryCards((prev) => prev.filter((i) => i !== index));
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    const galleryItems = document.querySelectorAll(".gallery-item");
+    galleryItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-black relative overflow-hidden text-gray-300">
       {/* Background Elements for Depth */}
@@ -531,9 +606,9 @@ function App() {
           {/* Call Button */}
           <button
             onClick={handleCall}
-            className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-lg text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700/50 hover:from-gray-700/90 hover:to-gray-800/90 hover:text-gray-200 transition-all duration-300 transform hover:scale-110 hover:shadow-xl"
+            className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-black text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700 hover:border-gray-500 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
           >
-            <Phone className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7" />
+            <Phone className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-gray-400 group-hover:text-gray-200 transition-colors duration-300" />
 
             {/* Tooltip */}
             <div className="absolute top-1/2 right-full mr-3 sm:mr-4 transform -translate-y-1/2 bg-gray-800/90 backdrop-blur-sm text-gray-300 px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap border border-gray-700/50 pointer-events-none">
@@ -548,9 +623,9 @@ function App() {
           {/* Instagram Button */}
           <button
             onClick={handleInstagram}
-            className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-lg text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700/50 hover:from-gray-700/90 hover:to-gray-800/90 hover:text-gray-200 transition-all duration-300 transform hover:scale-110 hover:shadow-xl"
+            className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-black text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700 hover:border-gray-500 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
           >
-            <Instagram className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7" />
+            <Instagram className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-gray-400 group-hover:text-gray-200 transition-colors duration-300" />
 
             {/* Tooltip */}
             <div className="absolute top-1/2 right-full mr-3 sm:mr-4 transform -translate-y-1/2 bg-gray-800/90 backdrop-blur-sm text-gray-300 px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap border border-gray-700/50 pointer-events-none">
@@ -565,9 +640,9 @@ function App() {
           {/* Maps Button */}
           <button
             onClick={handleMaps}
-            className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-gradient-to-br from-gray-900/90 to-gray-800/90 backdrop-blur-lg text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700/50 hover:from-gray-700/90 hover:to-gray-800/90 hover:text-gray-200 transition-all duration-300 transform hover:scale-110 hover:shadow-xl"
+            className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-black text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700 hover:border-gray-500 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
           >
-            <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7" />
+            <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-gray-400 group-hover:text-gray-200 transition-colors duration-300" />
 
             {/* Tooltip */}
             <div className="absolute top-1/2 right-full mr-3 sm:mr-4 transform -translate-y-1/2 bg-gray-800/90 backdrop-blur-sm text-gray-300 px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap border border-gray-700/50 pointer-events-none">
@@ -580,8 +655,7 @@ function App() {
           </button>
         </div>
 
-        {/* Vertical Glow Effect */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-600/10 via-gray-500/5 to-gray-600/10 rounded-2xl sm:rounded-3xl blur-xl opacity-50 -z-10"></div>
+        {/* No vertical glow effect for monochrome style */}
       </div>
 
       {/* Hero Content */}
@@ -658,7 +732,7 @@ function App() {
             >
               <button
                 onClick={openPricingModal}
-                className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-r from-black to-gray-700 text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-gray-800 hover:to-gray-700 hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
+                className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-br from-black to-[#282829] text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-black hover:to-[#282829] hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
               >
                 <span className="relative z-10 flex items-center">
                   Start Your Journey
@@ -705,45 +779,36 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             {services.map((service, index) => {
               const Icon = service.icon;
-              const isVisible = visibleCards.includes(index);
-
+              const isVisible = visibleOfferCards.includes(index);
               return (
                 <div
                   key={index}
-                  data-index={index}
-                  className={`service-card group relative bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 hover:border-gray-600/50 transition-all duration-700 transform ${
+                  data-offer-index={index}
+                  className={`offer-card group relative bg-gradient-to-br from-black to-[#282829] border border-gray-300 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 hover:border-gray-400 transition-all duration-700 transform ${
                     isVisible
-                      ? "opacity-100 translate-y-0 scale-100"
-                      : "opacity-0 translate-y-8 scale-95"
+                      ? "animate-hero-fadeup opacity-100 translate-y-0 scale-100"
+                      : "animate-hero-fadedown opacity-0 translate-y-8 scale-95"
                   }`}
-                  style={{
-                    transitionDelay: `${index * 150}ms`,
-                  }}
+                  style={{ transitionDelay: `${index * 150}ms` }}
                 >
-                  {/* Background Gradient */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${service.gradient} rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-                  ></div>
+                  {/* No background gradient for monochrome look */}
 
                   {/* Card Content */}
                   <div className="relative z-10">
                     {/* Icon Container */}
                     <div className="mb-6 sm:mb-8">
-                      <div className="relative inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl sm:rounded-2xl border border-gray-700/50 group-hover:border-gray-600/50 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                      <div className="relative inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-black rounded-xl sm:rounded-2xl border border-gray-700 group-hover:border-gray-500 transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
                         <Icon className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-400 group-hover:text-gray-300 transition-colors duration-300" />
-
-                        {/* Icon Glow */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-600/20 to-gray-500/10 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-300 mb-3 sm:mb-4 group-hover:text-gray-200 transition-colors duration-300">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-300 mb-3 sm:mb-4 group-hover:text-gray-100 transition-colors duration-300">
                       {service.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-gray-500 text-sm sm:text-base lg:text-lg leading-relaxed group-hover:text-gray-400 transition-colors duration-300 font-light">
+                    <p className="text-gray-400 text-sm sm:text-base lg:text-lg leading-relaxed group-hover:text-gray-200 transition-colors duration-300 font-light">
                       {service.description}
                     </p>
 
@@ -753,12 +818,7 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Card Border Glow */}
-                  <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-gray-600/10 via-gray-500/5 to-gray-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
-
-                  {/* Floating Particles Effect */}
-                  <div className="absolute top-4 right-4 w-2 h-2 bg-gray-500/30 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:animate-pulse"></div>
-                  <div className="absolute bottom-6 left-6 w-1 h-1 bg-gray-400/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-200 group-hover:animate-pulse"></div>
+                  {/* No border glow or floating particles for monochrome look */}
                 </div>
               );
             })}
@@ -767,7 +827,7 @@ function App() {
           <div className="mt-16 sm:mt-20 lg:mt-24 text-center">
             <button
               onClick={openPricingModal}
-              className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-r from-black to-gray-700 text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-gray-800 hover:to-gray-700 hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
+              className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-br from-black to-[#282829] text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-black hover:to-[#282829] hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
             >
               <span className="relative z-10 flex items-center">
                 Explore Pricing
@@ -838,9 +898,16 @@ function App() {
               `}</style>
               {trainers.concat(trainers).map((trainer, index, arr) => (
                 <React.Fragment key={index}>
-                  <div className="trainer-card group relative min-w-[260px] max-w-xs w-[90vw] sm:w-72 bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-gray-600/50 transition-all duration-700 transform hover:scale-105 mx-2">
+                  <div
+                    className={`trainer-card group relative min-w-[260px] max-w-xs w-[90vw] sm:w-72 bg-gradient-to-br from-black to-[#282829] border border-gray-300 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-gray-400 transition-all duration-700 transform hover:scale-105 mx-2 ${
+                      visibleTrainerCards.includes(index)
+                        ? "animate-hero-fadeup opacity-100 translate-y-0 scale-100"
+                        : "animate-hero-fadedown opacity-0 translate-y-8 scale-95"
+                    }`}
+                    data-trainer-index={index}
+                  >
                     {/* Background Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-gray-800/10 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-black/10 to-gray-800/10 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     {/* Card Content */}
                     <div className="relative z-10">
                       {/* Trainer Image */}
@@ -970,20 +1037,17 @@ function App() {
           {/* Masonry Gallery Grid */}
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 lg:gap-8 space-y-4 sm:space-y-6 lg:space-y-8">
             {galleryImages.map((image, index) => {
-              const isVisible = visibleGalleryItems.includes(index);
-
+              const isVisible = visibleGalleryCards.includes(index);
               return (
                 <div
                   key={image.id}
                   data-gallery-index={index}
                   className={`gallery-item group relative break-inside-avoid cursor-pointer transform transition-all duration-700 ${
                     isVisible
-                      ? "opacity-100 translate-y-0 scale-100"
-                      : "opacity-0 translate-y-8 scale-95"
+                      ? "animate-hero-fadeup opacity-100 translate-y-0 scale-100"
+                      : "animate-hero-fadedown opacity-0 translate-y-8 scale-95"
                   }`}
-                  style={{
-                    transitionDelay: `${index * 100}ms`,
-                  }}
+                  style={{ transitionDelay: `${index * 100}ms` }}
                   onClick={() => openLightbox(image.id)}
                 >
                   <div
@@ -1087,7 +1151,7 @@ function App() {
                   {pricingPlans.personal.map((plan, index) => (
                     <div
                       key={index}
-                      className={`relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
+                      className={`relative bg-gradient-to-br from-black to-[#282829] border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
                         plan.popular
                           ? "border-gray-500/50 ring-2 ring-gray-700/30"
                           : "border-gray-700/50 hover:border-gray-600/50"
@@ -1111,7 +1175,7 @@ function App() {
                         </div>
                         <button
                           onClick={handleBuyNow}
-                          className="w-full bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                          className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                         >
                           Buy Now
                         </button>
@@ -1137,7 +1201,7 @@ function App() {
                   {pricingPlans.gym.map((plan, index) => (
                     <div
                       key={index}
-                      className={`relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
+                      className={`relative bg-gradient-to-br from-black to-[#282829] border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
                         plan.popular
                           ? "border-gray-500/50 ring-2 ring-gray-700/30"
                           : "border-gray-700/50 hover:border-gray-600/50"
@@ -1164,7 +1228,7 @@ function App() {
                         </p>
                         <button
                           onClick={handleBuyNow}
-                          className="w-full bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                          className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                         >
                           Buy Now
                         </button>
@@ -1191,7 +1255,7 @@ function App() {
                     {pricingPlans.couple.map((plan, index) => (
                       <div
                         key={index}
-                        className="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-gray-700/50 ring-2 ring-gray-700/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                        className="relative bg-gradient-to-br from-black to-[#282829] border border-gray-700/50 ring-2 ring-gray-700/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
                       >
                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                           <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1 border border-gray-600/40">
@@ -1212,7 +1276,7 @@ function App() {
                           </p>
                           <button
                             onClick={handleBuyNow}
-                            className="w-full bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                            className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                           >
                             Buy Now
                           </button>
