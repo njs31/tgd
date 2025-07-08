@@ -43,7 +43,10 @@ function App() {
   };
 
   const handleInstagram = () => {
-    window.open("https://instagram.com", "_blank");
+    window.open(
+      "https://www.instagram.com/the_gymdivision?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+      "_blank"
+    );
   };
 
   const handleMaps = () => {
