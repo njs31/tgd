@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ArrowRight,
   Phone,
@@ -26,6 +26,14 @@ function App() {
   const [visibleGalleryItems, setVisibleGalleryItems] = useState<number[]>([]);
   const [visibleTrainers, setVisibleTrainers] = useState<number[]>([]);
   const [showPricingModal, setShowPricingModal] = useState(false);
+  const [trainersHeaderVisible, setTrainersHeaderVisible] = useState(false);
+  const trainersHeaderRef = useRef<HTMLDivElement | null>(null);
+  const [galleryHeaderVisible, setGalleryHeaderVisible] = useState(false);
+  const galleryHeaderRef = useRef<HTMLDivElement | null>(null);
+  const [footerVisible, setFooterVisible] = useState(false);
+  const footerRef = useRef<HTMLElement | null>(null);
+  const [heroVisible, setHeroVisible] = useState(false);
+  const heroRef = useRef<HTMLDivElement | null>(null);
 
   const handleCall = () => {
     window.open("tel:08035568589", "_self");
@@ -377,12 +385,138 @@ function App() {
     return () => document.removeEventListener("keydown", handleKeyPress);
   }, [showPricingModal]);
 
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const trainerIndex = parseInt(
+              entry.target.getAttribute("data-trainer-index") || "0"
+            );
+            setVisibleTrainers((prev) => [...prev, trainerIndex]);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const trainerCards = document.querySelectorAll(".trainer-card");
+    trainerCards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const galleryIndex = parseInt(
+              entry.target.getAttribute("data-gallery-index") || "0"
+            );
+            setVisibleGalleryItems((prev) => [...prev, galleryIndex]);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const galleryItems = document.querySelectorAll(".gallery-item");
+    galleryItems.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setTrainersHeaderVisible(entry.isIntersecting);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    if (trainersHeaderRef.current) {
+      observer.observe(trainersHeaderRef.current);
+    }
+    return () => {
+      if (trainersHeaderRef.current) {
+        observer.unobserve(trainersHeaderRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const galleryObserver = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setGalleryHeaderVisible(entry.isIntersecting);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    if (galleryHeaderRef.current) {
+      galleryObserver.observe(galleryHeaderRef.current);
+    }
+    return () => {
+      if (galleryHeaderRef.current) {
+        galleryObserver.unobserve(galleryHeaderRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const footerObserver = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setFooterVisible(entry.isIntersecting);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    if (footerRef.current) {
+      footerObserver.observe(footerRef.current);
+    }
+    return () => {
+      if (footerRef.current) {
+        footerObserver.unobserve(footerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const heroObserver = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHeroVisible(entry.isIntersecting);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    if (heroRef.current) {
+      heroObserver.observe(heroRef.current);
+    }
+    return () => {
+      if (heroRef.current) {
+        heroObserver.unobserve(heroRef.current);
+      }
+    };
+  }, []);
+
   const selectedImageData = selectedImage
     ? galleryImages.find((img) => img.id === selectedImage)
     : null;
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="min-h-screen bg-black relative overflow-hidden text-gray-300">
       {/* Background Elements for Depth */}
       <div className="absolute inset-0 bg-black">
         {/* Subtle grey gradients for awwwards feel */}
@@ -451,65 +585,84 @@ function App() {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 flex items-center justify-center min-h-screen sm:min-h-[80vh] bg-black">
+      <div
+        ref={heroRef}
+        className={`relative z-10 px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex flex-col items-start justify-center min-h-screen bg-black gap-y-8 overflow-hidden ${
+          heroVisible ? "animate-hero-fadeup" : "animate-hero-fadedown"
+        }`}
+      >
+        {/* Light circular grey radial gradient background */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 40%, #e5e7eb33 0%, transparent 70%)",
+          }}
+        />
         <div className="max-w-7xl mx-auto">
-          <div className="max-w-6xl mx-auto text-center flex flex-col gap-6 sm:gap-8 lg:gap-10 items-center">
+          <div className="max-w-6xl mx-auto flex flex-col gap-y-8 items-start text-left w-full">
             {/* Main Gym Name - Inspired by Logo */}
-            <div className="mb-4 sm:mb-8 lg:mb-10 flex flex-col items-center justify-center relative gap-3 sm:gap-5 lg:gap-7">
+            <div className="mb-4 sm:mb-8 lg:mb-10 flex flex-col items-start justify-start relative gap-y-2 text-left">
               <div
-                className="text-white text-xs sm:text-sm md:text-base tracking-[0.4em] font-light uppercase"
-                style={{ letterSpacing: "0.4em" }}
+                className="text-gray-400 text-xs sm:text-sm md:text-base tracking-[0.4em] font-light uppercase mb-1 ml-2 sm:ml-4 md:ml-6 animate-hero-fadeup"
+                style={{ letterSpacing: "0.4em", animationDelay: "0.05s" }}
               >
                 THE
               </div>
               <div
-                className="text-white font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-none"
-                style={{ fontFamily: "sans-serif" }}
+                className="text-gray-300 font-montserrat-extrabold text-7xl sm:text-9xl md:text-[8rem] lg:text-[7rem] leading-none animate-hero-fadeup max-w-full"
+                style={{ animationDelay: "0.15s" }}
               >
                 Gym
               </div>
               <div
-                className="text-white font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-none"
-                style={{ fontFamily: "sans-serif" }}
+                className="text-gray-300 font-montserrat-extrabold text-7xl sm:text-9xl md:text-[8rem] lg:text-[7rem] leading-none animate-hero-fadeup max-w-full"
+                style={{ animationDelay: "0.25s" }}
               >
                 Division
               </div>
             </div>
-
             {/* Tagline - Responsive Typography */}
-            <div className="mb-2 sm:mb-6 lg:mb-8">
+            <div
+              className="mb-2 sm:mb-6 lg:mb-8 ml-2 sm:ml-4 md:ml-6 animate-hero-fadeup max-w-full"
+              style={{ animationDelay: "0.35s" }}
+            >
               <div className="relative">
-                <p className="text-gray-500 text-sm sm:text-base md:text-lg lg:text-xl font-light tracking-[0.2em] uppercase mb-1 sm:mb-2">
+                <p className="text-gray-500 text-lg sm:text-xl md:text-2xl lg:text-xl font-light tracking-[0.2em] uppercase mb-1 sm:mb-2">
                   Not Just
                 </p>
-                <p className="text-gray-500 text-sm sm:text-base md:text-lg lg:text-xl font-light tracking-[0.2em] uppercase mb-1 sm:mb-2">
+                <p className="text-gray-500 text-lg sm:text-xl md:text-2xl lg:text-xl font-light tracking-[0.2em] uppercase mb-1 sm:mb-2">
                   A Gym
                 </p>
-                <p className="text-gray-400 text-base sm:text-lg md:text-xl lg:text-2xl font-medium tracking-[0.15em] uppercase">
+                <p className="text-gray-400 text-xl sm:text-2xl md:text-3xl lg:text-2xl font-medium tracking-[0.15em] uppercase">
                   A Movement
                 </p>
-                <div className="absolute -bottom-2 sm:-bottom-4 left-1/2 transform -translate-x-1/2 w-16 sm:w-24 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
+                <div className="absolute -bottom-2 sm:-bottom-4 left-0 w-16 sm:w-24 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
               </div>
             </div>
-
             {/* Description - Responsive */}
-            <div className="mb-2 sm:mb-6 lg:mb-8 px-2 sm:px-0">
-              <p className="text-gray-500 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl sm:max-w-2xl mx-auto font-light">
+            <div
+              className="mb-2 sm:mb-6 lg:mb-8 px-2 sm:px-0 animate-hero-fadeup max-w-full"
+              style={{ animationDelay: "0.45s" }}
+            >
+              <p className="text-gray-500 text-lg sm:text-xl md:text-2xl lg:text-xl leading-relaxed max-w-xl sm:max-w-2xl mx-auto font-light text-left">
                 Transform your body, elevate your mind, and join a community
                 dedicated to pushing beyond limits. This is where legends are
                 forged.
               </p>
             </div>
-
             {/* CTA Button - Responsive */}
-            <div className="flex justify-center">
+            <div
+              className="flex justify-start animate-hero-fadeup"
+              style={{ animationDelay: "0.55s" }}
+            >
               <button
                 onClick={openPricingModal}
-                className="group relative inline-flex items-center px-6 sm:px-8 lg:px-12 py-3 sm:py-4 bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 font-medium text-base sm:text-lg tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-gray-700 hover:to-gray-800 hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
+                className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-r from-black to-gray-700 text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-gray-800 hover:to-gray-700 hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
               >
                 <span className="relative z-10 flex items-center">
                   Start Your Journey
-                  <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </span>
 
                 {/* Button Glow Effect */}
@@ -519,52 +672,26 @@ function App() {
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl sm:rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-500 -z-10"></div>
               </button>
             </div>
-
-            {/* Stats Section - Responsive Grid */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-sm sm:max-w-lg lg:max-w-2xl mx-auto">
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-400 mb-1 sm:mb-2">
-                  5K+
-                </div>
-                <div className="text-gray-600 text-xs sm:text-sm uppercase tracking-wider">
-                  Members
-                </div>
-              </div>
-              <div className="text-center border-l border-r border-gray-800/50">
-                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-400 mb-1 sm:mb-2">
-                  50+
-                </div>
-                <div className="text-gray-600 text-xs sm:text-sm uppercase tracking-wider">
-                  Trainers
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-400 mb-1 sm:mb-2">
-                  24/7
-                </div>
-                <div className="text-gray-600 text-xs sm:text-sm uppercase tracking-wider">
-                  Access
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
       {/* What We Offer Section */}
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 bg-black">
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 bg-black overflow-hidden">
+        {/* Light circular grey radial gradient background */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 40%, #e5e7eb33 0%, transparent 70%)",
+          }}
+        />
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16 sm:mb-20 lg:mb-24">
             <div className="relative">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-300 mb-4 sm:mb-6 tracking-tight">
-                <span className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 bg-clip-text text-transparent">
-                  WHAT WE
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-gray-300 via-gray-200 to-gray-400 bg-clip-text text-transparent">
-                  OFFER
-                </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-roboto-medium font-black text-gray-300 mb-4 sm:mb-6 tracking-tight">
+                WHAT WE OFFER
               </h2>
               <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 sm:w-32 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
             </div>
@@ -636,57 +763,62 @@ function App() {
               );
             })}
           </div>
-
           {/* Explore Pricing Button */}
           <div className="mt-16 sm:mt-20 lg:mt-24 text-center">
             <button
               onClick={openPricingModal}
-              className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-3 sm:py-4 bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 font-medium text-base sm:text-lg tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-gray-700 hover:to-gray-800 hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
+              className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-r from-black to-gray-700 text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-gray-800 hover:to-gray-700 hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
             >
               <span className="relative z-10 flex items-center">
                 Explore Pricing
-                <ArrowRight className="ml-2 sm:ml-3 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                <ArrowRight className="ml-2 sm:ml-3 h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-1 transition-transform duration-300" />
               </span>
-
               {/* Button Glow Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-gray-600/10 to-gray-500/5 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
               {/* Button Shadow */}
               <div className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl sm:rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-500 -z-10"></div>
             </button>
           </div>
-
-          {/* Bottom Accent */}
-          <div className="mt-16 sm:mt-20 lg:mt-24 text-center">
-            <div className="inline-flex items-center space-x-2 text-gray-600 text-sm sm:text-base font-light">
-              <div className="w-8 sm:w-12 h-px bg-gradient-to-r from-transparent to-gray-600"></div>
-              <span className="tracking-wider uppercase">
-                Premium Facilities
-              </span>
-              <div className="w-8 sm:w-12 h-px bg-gradient-to-l from-transparent to-gray-600"></div>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Personal Trainers Section */}
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 bg-black">
+      {/* What We Offer Section */}
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 bg-black overflow-hidden">
+        {/* Light circular grey radial gradient background */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 40%, #e5e7eb33 0%, transparent 70%)",
+          }}
+        />
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16 sm:mb-20 lg:mb-24">
+          <div
+            className="text-center mb-16 sm:mb-20 lg:mb-24"
+            ref={trainersHeaderRef}
+          >
             <div className="relative">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-300 mb-4 sm:mb-6 tracking-tight">
-                <span className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 bg-clip-text text-transparent">
-                  OUR PERSONAL
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-gray-300 via-gray-200 to-gray-400 bg-clip-text text-transparent">
-                  TRAINERS
-                </span>
+              <h2
+                className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-roboto-medium font-black text-gray-300 mb-4 sm:mb-6 tracking-tight ${
+                  trainersHeaderVisible
+                    ? "animate-hero-fadeup"
+                    : "animate-hero-fadedown"
+                }`}
+                style={{ animationDelay: "0.05s" }}
+              >
+                OUR PERSONAL TRAINERS
               </h2>
               <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 sm:w-32 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
             </div>
-            <p className="text-gray-500 text-base sm:text-lg md:text-xl mt-6 sm:mt-8 max-w-2xl mx-auto font-light">
+            <p
+              className={`text-gray-500 text-base sm:text-lg md:text-xl mt-6 sm:mt-8 max-w-2xl mx-auto font-light ${
+                trainersHeaderVisible
+                  ? "animate-hero-fadeup"
+                  : "animate-hero-fadedown"
+              }`}
+              style={{ animationDelay: "0.15s" }}
+            >
               Meet our certified fitness experts dedicated to helping you
               achieve your goals
             </p>
@@ -794,23 +926,42 @@ function App() {
       </div>
 
       {/* Gallery Section */}
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 bg-black">
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 bg-black overflow-hidden">
+        {/* Light circular grey radial gradient background */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 40%, #e5e7eb33 0%, transparent 70%)",
+          }}
+        />
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16 sm:mb-20 lg:mb-24">
+          <div
+            className="text-center mb-16 sm:mb-20 lg:mb-24"
+            ref={galleryHeaderRef}
+          >
             <div className="relative">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-300 mb-4 sm:mb-6 tracking-tight">
-                <span className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 bg-clip-text text-transparent">
-                  OUR
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-gray-300 via-gray-200 to-gray-400 bg-clip-text text-transparent">
-                  GALLERY
-                </span>
+              <h2
+                className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-roboto-medium font-black text-gray-300 mb-4 sm:mb-6 tracking-tight ${
+                  galleryHeaderVisible
+                    ? "animate-hero-fadeup"
+                    : "animate-hero-fadedown"
+                }`}
+                style={{ animationDelay: "0.05s" }}
+              >
+                OUR GALLERY
               </h2>
               <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 sm:w-32 h-px bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
             </div>
-            <p className="text-gray-500 text-base sm:text-lg md:text-xl mt-6 sm:mt-8 max-w-2xl mx-auto font-light">
+            <p
+              className={`text-gray-500 text-base sm:text-lg md:text-xl mt-6 sm:mt-8 max-w-2xl mx-auto font-light ${
+                galleryHeaderVisible
+                  ? "animate-hero-fadeup"
+                  : "animate-hero-fadedown"
+              }`}
+              style={{ animationDelay: "0.15s" }}
+            >
               Take a visual tour of our state-of-the-art facilities and premium
               equipment
             </p>
@@ -881,7 +1032,15 @@ function App() {
 
       {/* Pricing Modal */}
       {showPricingModal && (
-        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4 overflow-hidden">
+          {/* Light circular grey radial gradient background */}
+          <div
+            className="pointer-events-none absolute inset-0 z-0"
+            style={{
+              background:
+                "radial-gradient(circle at 50% 40%, #e5e7eb33 0%, transparent 70%)",
+            }}
+          />
           {/* Close Button */}
           <button
             onClick={closePricingModal}
@@ -892,7 +1051,7 @@ function App() {
 
           {/* Modal Content */}
           <div className="relative max-w-7xl max-h-[90vh] w-full overflow-y-auto">
-            <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 backdrop-blur-xl border border-gray-700/50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12">
+            <div className="bg-black border border-gray-700/50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12">
               {/* Modal Header */}
               <div className="text-center mb-12 sm:mb-16">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-300 mb-4 sm:mb-6 tracking-tight">
@@ -1142,10 +1301,24 @@ function App() {
       </div>
 
       {/* Responsive Footer */}
-      <footer className="relative z-20 w-full bg-black border-t border-gray-800/60 px-4 sm:px-8 py-8 sm:py-12 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8 md:gap-0">
+      <footer
+        ref={footerRef}
+        className={`relative z-20 w-full bg-black border-t border-gray-800/60 px-4 sm:px-8 py-8 sm:py-12 mt-12 overflow-hidden ${
+          footerVisible ? "animate-hero-fadeup" : "animate-hero-fadedown"
+        }`}
+        style={{ animationDelay: "0.05s" }}
+      >
+        {/* Light circular grey radial gradient background */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 40%, #e5e7eb33 0%, transparent 70%)",
+          }}
+        />
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8 md:gap-0 pl-4 sm:pl-6 md:pl-8">
           {/* Left: Hours & Days */}
-          <div className="flex-1 text-center md:text-left mb-4 md:mb-0">
+          <div className="flex-1 text-left mb-4 md:mb-0">
             <div className="text-gray-400 text-lg sm:text-xl font-bold tracking-wide mb-1">
               Opening Hours
             </div>
@@ -1157,7 +1330,7 @@ function App() {
             </div>
           </div>
           {/* Center: Address */}
-          <div className="flex-1 text-center flex flex-col items-center justify-center">
+          <div className="flex-1 text-left flex flex-col items-start justify-center">
             <div className="flex items-center space-x-2 mb-2">
               <MapPin className="h-5 w-5 text-gray-400" />
               <span className="text-gray-300 text-base sm:text-lg font-medium">
@@ -1169,7 +1342,7 @@ function App() {
             </div>
           </div>
           {/* Right: Email */}
-          <div className="flex-1 text-center md:text-right flex flex-col items-center md:items-end">
+          <div className="flex-1 text-left flex flex-col items-start md:items-end">
             <div className="flex items-center space-x-2 mb-2">
               <span className="inline-block bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 rounded-full p-2">
                 <svg
