@@ -611,7 +611,7 @@ function App() {
             onClick={handleCall}
             className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-black text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700 hover:border-gray-500 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
           >
-            <Phone className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-gray-400 group-hover:text-gray-200 transition-colors duration-300" />
+            <Phone className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-white group-hover:text-white transition-colors duration-300" />
 
             {/* Tooltip */}
             <div className="absolute top-1/2 right-full mr-3 sm:mr-4 transform -translate-y-1/2 bg-gray-800/90 backdrop-blur-sm text-gray-300 px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap border border-gray-700/50 pointer-events-none">
@@ -628,7 +628,7 @@ function App() {
             onClick={handleInstagram}
             className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-black text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700 hover:border-gray-500 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
           >
-            <Instagram className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-gray-400 group-hover:text-gray-200 transition-colors duration-300" />
+            <Instagram className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-white group-hover:text-white transition-colors duration-300" />
 
             {/* Tooltip */}
             <div className="absolute top-1/2 right-full mr-3 sm:mr-4 transform -translate-y-1/2 bg-gray-800/90 backdrop-blur-sm text-gray-300 px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap border border-gray-700/50 pointer-events-none">
@@ -645,7 +645,7 @@ function App() {
             onClick={handleMaps}
             className="group relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 bg-black text-gray-300 rounded-xl sm:rounded-2xl border border-gray-700 hover:border-gray-500 hover:text-gray-100 transition-all duration-300 transform hover:scale-110"
           >
-            <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-gray-400 group-hover:text-gray-200 transition-colors duration-300" />
+            <MapPin className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 xl:h-7 xl:w-7 text-white group-hover:text-white transition-colors duration-300" />
 
             {/* Tooltip */}
             <div className="absolute top-1/2 right-full mr-3 sm:mr-4 transform -translate-y-1/2 bg-gray-800/90 backdrop-blur-sm text-gray-300 px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap border border-gray-700/50 pointer-events-none">
@@ -735,7 +735,8 @@ function App() {
             >
               <button
                 onClick={openPricingModal}
-                className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-br from-black to-[#282829] text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-700/50 hover:from-black hover:to-[#282829] hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
+                className="group relative inline-flex items-center px-8 sm:px-10 lg:px-12 py-4 sm:py-5 bg-gradient-to-br from-black to-[#282829] text-lg sm:text-xl md:text-2xl lg:text-lg text-gray-300 font-medium tracking-wide rounded-xl sm:rounded-2xl shadow-2xl border border-gray-400 hover:from-black hover:to-[#282829] hover:text-gray-200 transition-all duration-500 transform hover:scale-105 hover:shadow-3xl"
+                style={{ borderWidth: "0.5px", borderColor: "#9ca3af" }}
               >
                 <span className="relative z-10 flex items-center">
                   Start Your Journey
@@ -892,7 +893,7 @@ function App() {
             <div className="flex gap-8 whitespace-nowrap flex-nowrap w-max animate-marquee">
               <style>{`
                 .animate-marquee {
-                  animation: marquee 10s linear infinite;
+                  animation: marquee 30s linear infinite;
                 }
                 @keyframes marquee {
                   0% { transform: translateX(0); }
@@ -902,11 +903,9 @@ function App() {
               {trainers.concat(trainers).map((trainer, index, arr) => (
                 <React.Fragment key={index}>
                   <div
-                    className={`trainer-card group relative min-w-[260px] max-w-xs w-[90vw] sm:w-72 bg-gradient-to-br from-black to-[#282829] border border-gray-300 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-gray-400 transition-all duration-700 transform hover:scale-105 mx-2 ${
-                      visibleTrainerCards.includes(index)
-                        ? "animate-hero-fadeup opacity-100 translate-y-0 scale-100"
-                        : "animate-hero-fadedown opacity-0 translate-y-8 scale-95"
-                    }`}
+                    className={
+                      "trainer-card group relative min-w-[260px] max-w-xs w-[90vw] sm:w-72 bg-gradient-to-br from-black to-[#282829] border border-gray-300 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-gray-400 transition-all duration-700 transform hover:scale-105 mx-2 opacity-100 translate-y-0 scale-100"
+                    }
                     data-trainer-index={index}
                   >
                     {/* Background Gradient */}
@@ -1135,59 +1134,6 @@ function App() {
                 </p>
               </div>
 
-              {/* Personal Training Section */}
-              <div className="mb-12 sm:mb-16">
-                <div className="text-center mb-8 sm:mb-12">
-                  <div className="inline-flex items-center space-x-3 mb-4">
-                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
-                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-300">
-                      PERSONAL TRAINING
-                    </h3>
-                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
-                  </div>
-                  <p className="text-gray-400 text-sm sm:text-base font-medium bg-gray-700/20 border border-gray-600/30 rounded-xl px-4 py-2 inline-block">
-                    1 Month Membership Free
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                  {pricingPlans.personal.map((plan, index) => (
-                    <div
-                      key={index}
-                      className={`relative bg-gradient-to-br from-black to-[#282829] border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
-                        plan.popular
-                          ? "border-gray-500/50 ring-2 ring-gray-700/30"
-                          : "border-gray-700/50 hover:border-gray-600/50"
-                      }`}
-                    >
-                      {plan.popular && (
-                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                          <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1 border border-gray-600/40">
-                            <Star className="h-4 w-4 text-gray-400" />
-                            <span>POPULAR</span>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="text-center">
-                        <h4 className="text-xl sm:text-2xl font-bold text-gray-300 mb-4">
-                          {plan.sessions}
-                        </h4>
-                        <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-200 mb-6">
-                          {plan.price}
-                        </div>
-                        <button
-                          onClick={handleBuyNow}
-                          className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
-                        >
-                          Buy Now
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Gym Memberships Section */}
               <div className="mb-12 sm:mb-16">
                 <div className="text-center mb-8 sm:mb-12">
@@ -1231,7 +1177,60 @@ function App() {
                         </p>
                         <button
                           onClick={handleBuyNow}
-                          className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                          className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl border border-gray-600/30"
+                        >
+                          Buy Now
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Personal Training Section */}
+              <div className="mb-12 sm:mb-16">
+                <div className="text-center mb-8 sm:mb-12">
+                  <div className="inline-flex items-center space-x-3 mb-4">
+                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-300">
+                      PERSONAL TRAINING
+                    </h3>
+                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
+                  </div>
+                  <p className="text-gray-400 text-sm sm:text-base font-medium bg-gray-700/20 border border-gray-600/30 rounded-xl px-4 py-2 inline-block">
+                    1 Month Membership Free
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                  {pricingPlans.personal.map((plan, index) => (
+                    <div
+                      key={index}
+                      className={`relative bg-gradient-to-br from-black to-[#282829] border rounded-2xl sm:rounded-3xl p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
+                        plan.popular
+                          ? "border-gray-500/50 ring-2 ring-gray-700/30"
+                          : "border-gray-700/50 hover:border-gray-600/50"
+                      }`}
+                    >
+                      {plan.popular && (
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                          <div className="bg-gradient-to-r from-gray-700 to-gray-800 text-gray-300 px-4 py-1 rounded-full text-sm font-bold flex items-center space-x-1 border border-gray-600/40">
+                            <Star className="h-4 w-4 text-gray-400" />
+                            <span>POPULAR</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="text-center">
+                        <h4 className="text-xl sm:text-2xl font-bold text-gray-300 mb-4">
+                          {plan.sessions}
+                        </h4>
+                        <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-200 mb-6">
+                          {plan.price}
+                        </div>
+                        <button
+                          onClick={handleBuyNow}
+                          className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl border border-gray-600/30"
                         >
                           Buy Now
                         </button>
@@ -1279,7 +1278,7 @@ function App() {
                           </p>
                           <button
                             onClick={handleBuyNow}
-                            className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                            className="w-full bg-gradient-to-br from-black to-[#282829] hover:from-black hover:to-[#282829] text-gray-200 font-bold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-xl border border-gray-600/30"
                           >
                             Buy Now
                           </button>
